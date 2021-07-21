@@ -16,6 +16,10 @@ module.exports = {
     "@babel/react",
     "@babel/preset-flow",
     "@babel/preset-typescript",
+    "linaria/babel",
   ],
-  plugins: [["@babel/plugin-proposal-class-properties", { loose: true }]],
+  plugins: [
+    ["@babel/plugin-proposal-class-properties", { loose: true }],
+    removeLinariaImport,
+  ],
 };
