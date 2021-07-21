@@ -1,6 +1,6 @@
-import { EditorState } from 'draft-js';
-import { Map } from 'immutable';
-import decodeOffsetKey from './decodeOffsetKey';
+import { EditorState } from "draft-js";
+import { Map } from "immutable";
+import decodeOffsetKey from "./decodeOffsetKey";
 
 interface TriggerForMentionResult {
   activeOffsetKey: string;
@@ -16,6 +16,7 @@ export default function getTriggerForMention(
   searches: Map<string, string>,
   mentionTriggers: string[]
 ): TriggerForMentionResult | null {
+  console.log(searches);
   // get the current selection
   const selection = editorState.getSelection();
   const anchorKey = selection.getAnchorKey();
@@ -83,10 +84,9 @@ export default function getTriggerForMention(
     return null;
   }
 
-  const [
-    activeOffsetKey,
-    activeTrigger,
-  ] = triggerForSelectionInsideWord.entrySeq().first();
+  const [activeOffsetKey, activeTrigger] = triggerForSelectionInsideWord
+    .entrySeq()
+    .first();
 
   return {
     activeOffsetKey,
