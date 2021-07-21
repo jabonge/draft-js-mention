@@ -1,5 +1,5 @@
-import { EditorState } from 'draft-js';
-import { Map } from 'immutable';
+import { EditorState } from "draft-js";
+import { Map } from "immutable";
 interface TriggerForMentionResult {
     activeOffsetKey: string;
     activeTrigger: string;
