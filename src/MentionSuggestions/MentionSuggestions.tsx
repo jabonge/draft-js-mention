@@ -5,27 +5,27 @@ import React, {
   KeyboardEvent,
   ReactElement,
   RefAttributes,
-} from 'react';
-import PropTypes from 'prop-types';
+} from "react";
+import PropTypes from "prop-types";
 import {
   DraftHandleValue,
   EditorState,
   genKey,
   SelectionState,
-} from 'draft-js';
-import { AriaProps, EditorCommand } from '@draft-js-plugins/editor';
-import Entry, { EntryComponentProps } from './Entry/Entry';
-import addMention from '../modifiers/addMention';
-import getSearchText from '../utils/getSearchText';
-import defaultEntryComponent from './Entry/DefaultEntryComponent';
-import { MentionData, MentionPluginStore, PopperOptions } from '..';
+} from "draft-js";
+import { AriaProps, EditorCommand } from "@draft-js-plugins/editor";
+import Entry, { EntryComponentProps } from "./Entry/Entry";
+import addMention from "../modifiers/addMention";
+import getSearchText from "../utils/getSearchText";
+import defaultEntryComponent from "./Entry/DefaultEntryComponent";
+import { MentionData, MentionPluginStore, PopperOptions } from "..";
 import defaultPositionSuggestions, {
   PositionSuggestionsFn,
-} from '../utils/positionSuggestions';
-import { MentionPluginTheme } from '../theme';
-import getTriggerForMention from '../utils/getTriggerForMention';
-import Popover from './Popover';
-import { warning } from '../utils/warning';
+} from "../utils/positionSuggestions";
+import { MentionPluginTheme } from "../theme";
+import getTriggerForMention from "../utils/getTriggerForMention";
+import Popover from "./Popover";
+import { warning } from "../utils/warning";
 
 export interface MentionSuggestionCallbacks {
   keyBindingFn?(event: KeyboardEvent): EditorCommand | null | undefined;
@@ -62,7 +62,7 @@ export interface MentionSuggestionsProps extends MentionSuggestionsPubProps {
   theme: MentionPluginTheme;
   mentionPrefix: string;
   mentionTriggers: string[];
-  entityMutability: 'SEGMENTED' | 'IMMUTABLE' | 'MUTABLE';
+  entityMutability: "SEGMENTED" | "IMMUTABLE" | "MUTABLE";
   popperOptions?: PopperOptions;
 }
 
@@ -70,7 +70,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onOpenChange: PropTypes.func.isRequired,
-    entityMutability: PropTypes.oneOf(['SEGMENTED', 'IMMUTABLE', 'MUTABLE']),
+    entityMutability: PropTypes.oneOf(["SEGMENTED", "IMMUTABLE", "MUTABLE"]),
     entryComponent: PropTypes.func,
     onAddMention: PropTypes.func,
     suggestions: PropTypes.array.isRequired,
@@ -84,7 +84,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
   popover?: HTMLElement;
   activeOffsetKey?: string;
   lastSearchValue?: string;
-  lastActiveTrigger?: string = '';
+  lastActiveTrigger?: string = "";
   lastSelectionIsInsideWord?: Immutable.Iterable<string, boolean>;
 
   constructor(props: MentionSuggestionsProps) {
@@ -169,7 +169,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
 
     // make sure the escaped search is reseted in the cursor since the user
     // already switched to another mention search
-    if (!this.props.store.isEscaped(this.activeOffsetKey || '')) {
+    if (!this.props.store.isEscaped(this.activeOffsetKey || "")) {
       this.props.store.resetEscapedSearch();
     }
 
@@ -178,7 +178,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
     // input field and then comes back: the dropdown will show again.
     if (
       !this.props.open &&
-      !this.props.store.isEscaped(this.activeOffsetKey || '')
+      !this.props.store.isEscaped(this.activeOffsetKey || "")
     ) {
       this.openDropdown();
     }
@@ -244,7 +244,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
   onEscape = (keyboardEvent: KeyboardEvent): void => {
     keyboardEvent.preventDefault();
 
-    this.props.store.escapeSearch(this.activeOffsetKey || '');
+    this.props.store.escapeSearch(this.activeOffsetKey || "");
     this.closeDropdown();
 
     // to force a re-render of the outer component to change the aria props
@@ -266,8 +266,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
     const newEditorState = addMention(
       this.props.store.getEditorState!(),
       mention,
-      this.props.mentionPrefix,
-      this.lastActiveTrigger || '',
+      this.lastActiveTrigger || "",
       this.props.entityMutability
     );
     this.props.store.setEditorState!(newEditorState);
@@ -287,11 +286,11 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
   commitSelection = (): DraftHandleValue => {
     const mention = this.props.suggestions[this.state.focusedOptionIndex];
     if (!this.props.store.getIsOpened() || !mention) {
-      return 'not-handled';
+      return "not-handled";
     }
 
     this.onMentionSelect(mention);
-    return 'handled';
+    return "handled";
   };
 
   openDropdown = (): void => {
@@ -323,7 +322,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
     const descendant = `mention-option-${this.key}-${this.state.focusedOptionIndex}`;
     this.props.ariaProps.ariaActiveDescendantID = descendant;
     this.props.ariaProps.ariaOwneeID = `mentions-list-${this.key}`;
-    this.props.ariaProps.ariaHasPopup = 'true';
+    this.props.ariaProps.ariaHasPopup = "true";
     this.props.ariaProps.ariaExpanded = true;
     this.props.onOpenChange(true);
   };
@@ -332,7 +331,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
     // make sure none of these callbacks are triggered
     this.props.callbacks.handleReturn = undefined;
     this.props.callbacks.keyBindingFn = undefined;
-    this.props.ariaProps.ariaHasPopup = 'false';
+    this.props.ariaProps.ariaHasPopup = "false";
     this.props.ariaProps.ariaExpanded = false;
     this.props.ariaProps.ariaActiveDescendantID = undefined;
     this.props.ariaProps.ariaOwneeID = undefined;
@@ -366,14 +365,14 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
 
     if (popoverComponent || positionSuggestions) {
       warning(
-        'The properties `popoverComponent` and `positionSuggestions` are deprecated and will be removed in @draft-js-plugins/mentions 6.0 . Use `popperOptions` instead'
+        "The properties `popoverComponent` and `positionSuggestions` are deprecated and will be removed in @draft-js-plugins/mentions 6.0 . Use `popperOptions` instead"
       );
       return React.cloneElement(
         popoverComponent || <div />,
         {
           ...elementProps,
           className: theme.mentionSuggestions,
-          role: 'listbox',
+          role: "listbox",
           id: `mentions-list-${this.key}`,
           ref: (element: HTMLElement) => {
             this.popover = element;
@@ -381,7 +380,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
         },
         this.props.suggestions.map((mention, index) => (
           <Entry
-            key={mention.id != null ? mention.id : mention.name}
+            key={mention.id != null ? mention.id : mention.title}
             onMentionSelect={this.onMentionSelect}
             onMentionFocus={this.onMentionFocus}
             isFocused={this.state.focusedOptionIndex === index}
@@ -408,7 +407,7 @@ export class MentionSuggestions extends Component<MentionSuggestionsProps> {
       >
         {this.props.suggestions.map((mention, index) => (
           <Entry
-            key={mention.id != null ? mention.id : mention.name}
+            key={mention.id != null ? mention.id : mention.title}
             onMentionSelect={this.onMentionSelect}
             onMentionFocus={this.onMentionFocus}
             isFocused={this.state.focusedOptionIndex === index}

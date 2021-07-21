@@ -1,40 +1,41 @@
-import * as PopperJS from '@popperjs/core';
-import { Modifier } from 'react-popper';
-import { Map } from 'immutable';
-import React, { ComponentType, ReactElement } from 'react';
-import { EditorState } from 'draft-js';
-import { EditorPlugin, AriaProps } from '@draft-js-plugins/editor';
-import Mention, { MentionProps, SubMentionComponentProps } from './Mention';
+import * as PopperJS from "@popperjs/core";
+import { Modifier } from "react-popper";
+import { Map } from "immutable";
+import React, { ComponentType, ReactElement } from "react";
+import { EditorState } from "draft-js";
+import { EditorPlugin, AriaProps } from "@draft-js-plugins/editor";
+import Mention, { MentionProps, SubMentionComponentProps } from "./Mention";
 import MentionSuggestions, {
   MentionSuggestionCallbacks,
   MentionSuggestionsPubProps,
-} from './MentionSuggestions/MentionSuggestions'; // eslint-disable-line import/no-named-as-default
+} from "./MentionSuggestions/MentionSuggestions"; // eslint-disable-line import/no-named-as-default
 import MentionSuggestionsPortal, {
   MentionSuggestionsPortalProps,
-} from './MentionSuggestionsPortal';
-import addMention from './modifiers/addMention';
-import { PositionSuggestionsFn } from './utils/positionSuggestions';
-import defaultRegExp from './defaultRegExp';
-import { defaultTheme, MentionPluginTheme } from './theme';
-import mentionStrategy from './mentionStrategy';
-import mentionSuggestionsStrategy from './mentionSuggestionsStrategy';
-import suggestionsFilter from './utils/defaultSuggestionsFilter';
+} from "./MentionSuggestionsPortal";
+import addMention from "./modifiers/addMention";
+import { PositionSuggestionsFn } from "./utils/positionSuggestions";
+import defaultRegExp from "./defaultRegExp";
+import { defaultTheme, MentionPluginTheme } from "./theme";
+import mentionStrategy from "./mentionStrategy";
+import mentionSuggestionsStrategy from "./mentionSuggestionsStrategy";
+import suggestionsFilter from "./utils/defaultSuggestionsFilter";
 
-export { default as MentionSuggestions } from './MentionSuggestions/MentionSuggestions';
+export { default as MentionSuggestions } from "./MentionSuggestions/MentionSuggestions";
 
 export { defaultTheme };
 export { addMention };
 export type { MentionPluginTheme };
 
-export type PopperOptions = Omit<Partial<PopperJS.Options>, 'modifiers'> & {
+export type PopperOptions = Omit<Partial<PopperJS.Options>, "modifiers"> & {
   createPopper?: typeof PopperJS.createPopper;
   modifiers?: ReadonlyArray<Modifier<unknown>>;
 };
 
 export interface MentionData {
-  link?: string;
   avatar?: string;
-  name: string;
+  description?: string;
+  replaceText?: string;
+  title: string;
   id?: null | string | number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any;
@@ -68,7 +69,7 @@ export interface MentionPluginConfig {
   positionSuggestions?: PositionSuggestionsFn;
   mentionComponent?: ComponentType<SubMentionComponentProps>;
   mentionSuggestionsComponent?: ComponentType;
-  entityMutability?: 'SEGMENTED' | 'IMMUTABLE' | 'MUTABLE';
+  entityMutability?: "SEGMENTED" | "IMMUTABLE" | "MUTABLE";
   mentionTrigger?: string | string[];
   mentionRegExp?: string;
   supportWhitespace?: boolean;
@@ -92,7 +93,7 @@ export default (
   };
 
   const ariaProps: AriaProps = {
-    ariaHasPopup: 'false',
+    ariaHasPopup: "false",
     ariaExpanded: false,
     ariaOwneeID: undefined,
     ariaActiveDescendantID: undefined,
@@ -149,19 +150,20 @@ export default (
   // errors when upgrading as basically every styling change would become a major
   // breaking change. 1px of an increased padding can break a whole layout.
   const {
-    mentionPrefix = '',
+    mentionPrefix = "",
     theme = defaultTheme,
     positionSuggestions,
     mentionComponent,
-    mentionSuggestionsComponent: MentionSuggestionsComponent = MentionSuggestions,
-    entityMutability = 'SEGMENTED',
-    mentionTrigger = '@',
+    mentionSuggestionsComponent:
+      MentionSuggestionsComponent = MentionSuggestions,
+    entityMutability = "SEGMENTED",
+    mentionTrigger = "@",
     mentionRegExp = defaultRegExp,
     supportWhitespace = false,
     popperOptions,
   } = config;
   const mentionTriggers: string[] =
-    typeof mentionTrigger === 'string' ? [mentionTrigger] : mentionTrigger;
+    typeof mentionTrigger === "string" ? [mentionTrigger] : mentionTrigger;
   const mentionSearchProps = {
     ariaProps,
     callbacks,
@@ -182,7 +184,7 @@ export default (
     <Mention {...props} theme={theme} mentionComponent={mentionComponent} />
   );
   const DecoratedMentionSuggestionsPortal = (
-    props: Omit<MentionSuggestionsPortalProps, 'store'>
+    props: Omit<MentionSuggestionsPortalProps, "store">
   ): ReactElement => <MentionSuggestionsPortal {...props} store={store} />;
   return {
     MentionSuggestions: DecoratedMentionSuggestionsComponent,
@@ -201,8 +203,8 @@ export default (
       },
     ],
     getAccessibilityProps: () => ({
-      role: 'combobox',
-      ariaAutoComplete: 'list',
+      role: "combobox",
+      ariaAutoComplete: "list",
       ariaHasPopup: ariaProps.ariaHasPopup,
       ariaExpanded: ariaProps.ariaExpanded,
       ariaActiveDescendantID: ariaProps.ariaActiveDescendantID,

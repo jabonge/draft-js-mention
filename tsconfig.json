@@ -1,7 +1,23 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "lib"
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": ["esnext", "dom", "dom.iterable", "es2020"],
+    "declaration": true,
+    "emitDeclarationOnly": true,
+
+    "jsx": "react",
+    "outDir": "lib",
+
+    "noEmit": false,
+
+    "strict": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
+  "exclude": ["node_modules"],
   "include": ["src"]
 }

@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react';
-import { MentionData } from '../../';
-import { MentionPluginTheme } from '../../theme';
-import Avatar from './Avatar/Avatar';
+import React, { ReactElement } from "react";
+import { MentionData } from "../../";
+import { MentionPluginTheme } from "../../theme";
+import Avatar from "./Avatar/Avatar";
 
 interface DefaultEntryComponentProps {
   mention: MentionData;
@@ -26,7 +26,9 @@ export default function DefaultEntryComponent(
   return (
     <div {...parentProps}>
       <Avatar mention={mention} theme={theme} />
-      <span className={theme?.mentionSuggestionsEntryText}>{mention.name}</span>
+      <span className={theme?.mentionSuggestionsEntryText}>
+        {mention.title}
+      </span>
     </div>
   );
 }

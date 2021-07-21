@@ -40,6 +40,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@draft-js-plugins/editor": "^4.1.0",
     "@popperjs/core": "^2.9.2",
     "@types/lodash": "^4.14.171",
     "clsx": "^1.0.4",
@@ -53,7 +54,11 @@
     "draft-js": "^0.10.1 || ^0.11.0",
     "react": "^16.8.0 || ^17.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/draft-js": "^0.11.4",
+    "@types/prop-types": "^15.7.4",
+    "@types/react": "^17.0.0"
+  },
   "publishConfig": {
     "access": "public"
   }

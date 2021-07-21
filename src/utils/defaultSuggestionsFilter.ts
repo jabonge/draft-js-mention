@@ -1,6 +1,6 @@
 // Get the first 5 suggestions that match
 
-import { MentionData, MultiMentionData } from '..';
+import { MentionData, MultiMentionData } from "..";
 
 const defaultSuggestionsFilter = (
   searchValue: string,
@@ -11,9 +11,9 @@ const defaultSuggestionsFilter = (
   const triggerSuggestions: MentionData[] =
     trigger && !Array.isArray(suggestions)
       ? suggestions[trigger]
-      : suggestions as MentionData[];
+      : (suggestions as MentionData[]);
   const filteredSuggestions = triggerSuggestions.filter(
-    (suggestion) => !value || suggestion.name.toLowerCase().indexOf(value) > -1
+    (suggestion) => !value || suggestion.title.toLowerCase().indexOf(value) > -1
   );
   const length =
     filteredSuggestions.length < 5 ? filteredSuggestions.length : 5;
